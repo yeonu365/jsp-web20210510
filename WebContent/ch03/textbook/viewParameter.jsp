@@ -35,9 +35,7 @@ if (values != null) {
 Enumeration paramEnum = request.getParameterNames();
 while(paramEnum.hasMoreElements()) {
 	String name = (String)paramEnum.nextElement();
-%>		
-	<%=name %>
-<%
+	out.print(name);
 	}
 %>	
 <p>
@@ -45,7 +43,7 @@ while(paramEnum.hasMoreElements()) {
 <%
 Map parameterMap = request.getParameterMap();
 String[] nameParam = (String[])parameterMap.get("name");
-if (nameParam !=null) {
+if (nameParam !=null ) {
 %>
 name = <%= nameParam[0] %>
 <%
