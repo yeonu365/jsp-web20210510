@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.*" %>
+<%@ page import="ch" %>
 
 <% request.setCharacterEncoding("utf-8"); %>
 <jsp:useBean id=" book1" class="ch08.Book">
