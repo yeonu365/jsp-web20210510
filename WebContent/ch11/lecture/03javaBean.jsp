@@ -1,7 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="ch07.*" %>
+
 <% request.setCharacterEncoding("utf-8"); %>
+<jsp:useBean id=" book1" class="ch08.Book">
+	<jsp:setProperty name="book1" property="title" value="JAVA"/>
+	<jsp:setProperty name="book2" property="writer" value="kim"/>
+</jsp:useBean>
+
 
 <!DOCTYPE html>
 <html>
@@ -12,14 +17,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%
-Page p = new Page(3,10);
-request.setAttribute("page",p);
-
-%>
 <div class="container">
-	<jsp:include page="05request-getAttribute-sub.jsp">
-	</jsp:include>
+	book : ${book1 } <br>
 	
 </div>
 </body>
