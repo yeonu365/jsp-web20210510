@@ -1,13 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="ch" %>
+
 
 <% request.setCharacterEncoding("utf-8"); %>
-<jsp:useBean id=" book1" class="ch08.Book">
+<jsp:useBean id="book1" class="ch08.Book">
 	<jsp:setProperty name="book1" property="title" value="JAVA"/>
-	<jsp:setProperty name="book2" property="writer" value="kim"/>
+	<jsp:setProperty name="book1" property="writer" value="kim"/>
 </jsp:useBean>
 
+<%
+pageContext.setAttribute("title", "writer");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -20,6 +23,16 @@
 <body>
 <div class="container">
 	book : ${book1 } <br>
+	title : ${book1.title } <br>
+	writer : ${book1.writer } <br>
+	<%-- none : ${book1.none } <br> --%>
+	
+	<hr>
+	title : ${book1["title"] } <br>
+	writer : ${book1["writer"] } <br>
+	
+	<hr>
+	title : ${book1[title] } <br>
 	
 </div>
 </body>
