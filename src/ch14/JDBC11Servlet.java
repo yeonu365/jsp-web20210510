@@ -69,8 +69,8 @@ private Employee executeJDBC(String id) {
 			if (rs.next()) {
 				employee = new Employee();
 				employee.setId(rs.getInt(1));
-				employee.setFirstName(rs.getString(2));
-				employee.setLastName(rs.getNString(3));
+				employee.setLastName(rs.getString(2));
+				employee.setFirstName(rs.getString(3));
 				
 			}
 			

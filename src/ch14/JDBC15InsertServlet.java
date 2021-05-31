@@ -3,9 +3,9 @@ package ch14;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +15,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ch14.bean.Customer;
 import ch14.bean.Employee;
 
 /**
- * Servlet implementation class JDBC12Servlet
+ * Servlet implementation class JDBC15InsertServlet
  */
-@WebServlet("/JDBC12Servlet")
-public class JDBC12Servlet extends HttpServlet {
+@WebServlet("/JDBC15InsertServlet")
+public class JDBC15InsertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JDBC12Servlet() {
+    public JDBC15InsertServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,28 +37,41 @@ public class JDBC12Servlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		
-		List<Employee> list = executeJDBC();
-		
-		request.setAttribute("employees", list);
-		
-		String path="/ch14/jdbc12.jsp";
+		String path = "/ch14/jdbc15form.jsp";
 		request.getRequestDispatcher(path).forward(request, response);
 	}
-	
-	private List<Employee> executeJDBC() {
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		
-		List<Employee> list = new ArrayList<>();
+		Employee employee = new Employee();
 		
-		String sql = "Select EmployeeID, LastName, FirstName, Notes FROM Employees ";
+		employee.setLastName(request.getParameter("lastName"));
+		employee.setFirstName(request.getParameter("firstName"));
+		employee.setNotes(request.getParameter("notes"));
+		
+		executeJDBC(employee);
+		
+		doGet(request, response);
+	}
+
+private void executeJDBC(Employee employee) {
+		
+		String sql = "insert into Employees " +
+				"(LastName, FirstName, notes) "+
+				"values " +
+				"(?,?,?)" ;
+				
 		
 		String url="jdbc:mysql://52.79.189.42/test";
 		String user="root";
 		String password="wnddkdwjdqhcjfl1";
 		
 		Connection con = null;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		
 		try {
@@ -65,22 +79,22 @@ public class JDBC12Servlet extends HttpServlet {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//연결
 			con = DriverManager.getConnection(url, user, password);
-			//statement 생성
-			stmt = con.createStatement();
-			//query실행과 결과를 ResultSet으로 받는다.
-			rs = stmt.executeQuery(sql);
-			// 결과 탐색
-			while (rs.next()) {
-				
-				Employee employee = new Employee();
-				employee.setId(rs.getInt(1));
-				employee.setLastName(rs.getString(2));
-				employee.setFirstName(rs.getString(3));
-				employee.setNotes(rs.getString(4));
-				
-				list.add(employee);
-			}
+			//preparedStatement 생성
+			stmt = con.prepareStatement(sql);
 			
+			// ? (파라미터)에 값 할당
+			stmt.setString(1, employee.getLastName());
+			stmt.setString(2, employee.getFirstName());
+			stmt.setString(3, employee.getNotes());
+
+			//쿼리 실행, 결과(ResultSet) 리턴 
+			int cnt = stmt.executeUpdate();
+			if (cnt ==1) {
+				System.out.println("성공");
+			}  else {
+				System.out.println("실패");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -110,16 +124,8 @@ public class JDBC12Servlet extends HttpServlet {
 				}
 			}
 		}
-		return list;
-	}
 	
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
+	
 }

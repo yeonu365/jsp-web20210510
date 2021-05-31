@@ -15,19 +15,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ch14.bean.Customer;
 import ch14.bean.Employee;
 
 /**
- * Servlet implementation class JDBC12Servlet
+ * Servlet implementation class JDBC13Servlet
  */
-@WebServlet("/JDBC12Servlet")
-public class JDBC12Servlet extends HttpServlet {
+@WebServlet("/JDBC13Servlet")
+public class JDBC13Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JDBC12Servlet() {
+    public JDBC13Servlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,21 +37,30 @@ public class JDBC12Servlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		
-		List<Employee> list = executeJDBC();
+		String pageStr = request.getParameter("page");
+		int page = 1;
+		if (pageStr !=null) {
+			page = Integer.parseInt(pageStr);
+		}
 		
-		request.setAttribute("employees", list);
+		List<Customer> list = executeJDBC(page);
+		request.setAttribute("customers", list);
 		
-		String path="/ch14/jdbc12.jsp";
+		String path ="/ch14/jdbc13.jsp";
 		request.getRequestDispatcher(path).forward(request, response);
+	
 	}
 	
-	private List<Employee> executeJDBC() {
+	
+	private List<Customer> executeJDBC(int page) {
 		
-		List<Employee> list = new ArrayList<>();
+		List<Customer> list = new ArrayList<>();
 		
-		String sql = "Select EmployeeID, LastName, FirstName, Notes FROM Employees ";
+		String sql = "SELECT CustomerID, CustomerName, City "
+				+ "FROM Customers "
+				+ "ORDER BY CustomerID "
+				+ "LIMIT " + ((page-1) * 5) + ", 5" ;
 		
 		String url="jdbc:mysql://52.79.189.42/test";
 		String user="root";
@@ -71,14 +81,12 @@ public class JDBC12Servlet extends HttpServlet {
 			rs = stmt.executeQuery(sql);
 			// 결과 탐색
 			while (rs.next()) {
+				Customer customer = new Customer();
+				customer.setId(rs.getInt(1));
+				customer.setName(rs.getString(2));
+				customer.setCity(rs.getString(3));
 				
-				Employee employee = new Employee();
-				employee.setId(rs.getInt(1));
-				employee.setLastName(rs.getString(2));
-				employee.setFirstName(rs.getString(3));
-				employee.setNotes(rs.getString(4));
-				
-				list.add(employee);
+				list.add(customer);
 			}
 			
 		} catch (Exception e) {
@@ -112,7 +120,6 @@ public class JDBC12Servlet extends HttpServlet {
 		}
 		return list;
 	}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
