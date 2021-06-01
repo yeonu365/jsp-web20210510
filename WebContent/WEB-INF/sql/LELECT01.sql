@@ -13,3 +13,5 @@ select * from Products;
 select * from Shippers;
 select * from Suppliers;
 
+Select EmployeeID, LastName, FirstName FROM Employees;
+select * from Employees;
