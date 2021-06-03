@@ -12,13 +12,32 @@
 <%@ include file="/WEB-INF/subModules/bootstrapHeader.jsp" %>
 
 <title>Insert title here</title>
+<script>
+var url = "${pageContext.request.contextPath}" + "/sample2/checkdup";
+$(document).ready(function() {
+	$("#button1").click(function() {
+		var id = $("#input1").val();
+		
+		$.post(url, {id: id}, function(data) {
+			if (data == 'ok') {
+				$("#span1").text("사용 가능");
+			} else {
+				$("#span1").text("사용 불가능");
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
 <s2:navbar></s2:navbar>
 <div class="container">
 	<form action="${pageContext.request.contextPath }/sample2/signup" method="post">
 		id : <br>
-		<input type="text" name="id"><br>
+		<input type="text" name="id" id="input1">
+		<button id="button1" type="button">중복확인</button>
+		<br>
+		<span id="span1"></span><br>
 		pw : <br>
 		<input type="password" name="password"><br>
 		name : <br>
@@ -29,6 +48,13 @@
 		<input type="submit" value="가입">
 	
 	</form>
+	
+	<c:if test="${not empty message }">
+	<div>
+		${message }
+	</div>
+	</c:if>
+	
 </div>
 </body>
 </html>

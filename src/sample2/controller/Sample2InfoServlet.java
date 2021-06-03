@@ -12,16 +12,16 @@ import sample2.bean.Member;
 import sample2.dao.MemberDao;
 
 /**
- * Servlet implementation class Sample2LoginServlet
+ * Servlet implementation class Sample2InfoServlet
  */
-@WebServlet("/sample2/login")
-public class Sample2LoginServlet extends HttpServlet {
+@WebServlet("/sample2/info")
+public class Sample2InfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Sample2LoginServlet() {
+    public Sample2InfoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,31 +30,28 @@ public class Sample2LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String path = "/WEB-INF/sample2/login.jsp";
+		HttpSession session = request.getSession();
+		Member member = (Member) session.getAttribute("userLogined");
+		
+		if (member != null) {
+		MemberDao dao = new MemberDao();
+		Member mem = dao.getMember(member.getId());
+		request.setAttribute("member", mem);
+		
+		String path = "/WEB-INF/sample2/info.jsp";
 		request.getRequestDispatcher(path).forward(request, response);
+		} else {
+			String path = request.getContextPath() + "/sample2/main";
+			response.sendRedirect(path);
+		}
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String id = request.getParameter("id");
-		String password = request.getParameter("password");
-		
-		MemberDao dao = new MemberDao();
-		Member member = dao.getMember(id);
-		
-		if (member != null && member.getPassword().contentEquals(password)) {
-			HttpSession session = request.getSession();
-			session.setAttribute("userLogined", member);
-			String path = request.getContextPath() +"/sample2/main";
-			response.sendRedirect(path);
-		} else {
-			String path = "/WEB-INF/sample2/login.jsp";
-			request.setAttribute("message", "아이디나 패스워드가 일치하지 않습니다.");
-			request.getRequestDispatcher(path).forward(request, response);
-		}
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
