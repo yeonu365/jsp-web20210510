@@ -1,0 +1,16 @@
+DESC Member;
+
+ALTER TABLE Member ADD PRIMARY KEY (id);
+
+ALTER TABLE Member MODIFY password VARCHAR(255) NOT NULL;
+ALTER TABLE Member MODIFY name VARCHAR(255) NOT NULL;
+ALTER TABLE Member MODIFY birth DATE NOT NULL;
+ALTER TABLE Member MODIFY inserted TIMESTAMP NOT NULL;
+ALTER TABLE Member MODIFY inserted TIMESTAMP DEFAULT now();
+ALTER TABLE Member MODIFY inserted TIMESTAMP NOT NULL DEFAULT now();
+
+INSERT INTO Member (id, password, name, birth)
+VALUES ('donald', 'trump', 'trump', '2011-01-01');
+SELECT * FROM Member;
+
+ALTER TABLE Member DROP NOT NULL WHERE inserted
