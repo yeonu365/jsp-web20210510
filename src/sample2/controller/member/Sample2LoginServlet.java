@@ -1,4 +1,4 @@
-package sample2.controller;
+package sample2.controller.member;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -12,16 +12,16 @@ import sample2.bean.Member;
 import sample2.dao.MemberDao;
 
 /**
- * Servlet implementation class Sample2RemoveServlet
+ * Servlet implementation class Sample2LoginServlet
  */
-@WebServlet("/sample2/remove")
-public class Sample2RemoveServlet extends HttpServlet {
+@WebServlet("/sample2/member/login")
+public class Sample2LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Sample2RemoveServlet() {
+    public Sample2LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,24 +30,31 @@ public class Sample2RemoveServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String path = "/WEB-INF/sample2/member/login.jsp";
+		request.getRequestDispatcher(path).forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		Member member = (Member) session.getAttribute("userLogined");
+		request.setCharacterEncoding("utf-8");
+		String id = request.getParameter("id");
+		String password = request.getParameter("password");
 		
 		MemberDao dao = new MemberDao();
-		dao.remove(member.getId());
+		Member member = dao.getMember(id);
 		
-		session.invalidate();
-		
-		String path = request.getContextPath() + "/sample2/main";
-		response.sendRedirect(path);
+		if (member != null && member.getPassword().contentEquals(password)) {
+			HttpSession session = request.getSession();
+			session.setAttribute("userLogined", member);
+			String path = request.getContextPath() +"/sample2/main";
+			response.sendRedirect(path);
+		} else {
+			String path = "/WEB-INF/sample2/member/login.jsp";
+			request.setAttribute("message", "아이디나 패스워드가 일치하지 않습니다.");
+			request.getRequestDispatcher(path).forward(request, response);
+		}
 	}
 
 }
