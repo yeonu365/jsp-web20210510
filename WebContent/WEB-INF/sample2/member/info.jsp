@@ -48,12 +48,8 @@
 		<button id="button1" type="button">수정</button>
 		<input type="submit" id="submit1" value="전송" hidden>	
 	</form>
-	
-	<c:if test="${not empty message }">
-		<div>
-			${message }
-		</div>
-	</c:if>
+	<s2:message></s2:message>
+
 	
 <div class="container">
 	<form id="form2" action="${pageContext.request.contextPath }/sample2/member/remove" method="post">
