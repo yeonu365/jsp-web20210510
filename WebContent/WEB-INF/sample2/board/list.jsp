@@ -31,7 +31,12 @@
 					<td>${board.boardId }</td>
 					<td>
 						<a href="<%= request.getContextPath() %>/sample2/board/detail?id=${board.boardId }">
-						${board.title }</a></td>
+						${board.title }</a>
+						
+						<c:if test="${board.numberOfComment != 0 }">
+						<span>[${board.numberOfComment }]</span>
+						</c:if>
+					</td>
 					<td>${board.memberName }</td>
 					<td>${board.timeAgo }</td>
 				</tr>
