@@ -35,8 +35,11 @@ public class Sample2BoardListServlet extends HttpServlet {
 		BoardDao dao = new BoardDao();
 //		List<BoardDto> boardList = dao.list2();
 		List<BoardDto> boardList = dao.list3();
+		int total = dao.countAll();
 		
 		request.setAttribute("boards", boardList);
+		request.setAttribute("totalNum", total);
+		
 		String path = "/WEB-INF/sample2/board/list.jsp";
 		request.getRequestDispatcher(path).forward(request, response);
 	}
