@@ -31,8 +31,8 @@
 	  <h1 class="display-4"><i class="fab fa-java"></i>&nbsp;&nbsp;환영합니다.</h1>
 	  <p class="lead">기본 Servlet / JSP 로 만든 회원, 게시판 어플리케이션입니다.</p>
 	  <hr class="my-4">
-	  <p>선생님을 따라 처음 만들어 본 게시판 입니다.</p>
-	  <p>bootstrap v4.6의 Components 의 Jumbotron 을 사용해보았습니다.</p>
+	  <p>약 5개월간 공부하고 만든 첫번쨰 프로젝트입니다.</p>
+	  <p>회원가입 가능합니다. </p>
 	   
 	  <a class="btn btn-primary btn-lg" href="<%= request.getContextPath()%>/sample2/member/signup" role="button">회원가입</a>
 	</div>

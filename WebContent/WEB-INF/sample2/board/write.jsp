@@ -36,7 +36,7 @@
 			<textarea rows="10" class="form-control" name="body" id="textarea1"></textarea>
 		</div>
 		
-		<button class="btn btn-primary" type="submit"><i class="fas fa-pencil-alt"></i>작성</button>
+		<button class="btn btn-primary" type="submit"><i class="fas fa-pencil-alt"></i>&nbsp;작성</button>
 		
 		
 		
